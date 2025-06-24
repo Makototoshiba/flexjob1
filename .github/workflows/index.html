@@ -2,283 +2,65 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FlexJob</title>
+  <title>FlexJob — Firebase тест</title>
+  <!-- Подключаем Firebase SDK через CDN -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 1rem;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .description {
-      margin: 1rem 0;
-      padding: 1rem;
-      background: #e0f0ff;
-      border-left: 5px solid #007bff;
-    }
-    main {
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-    section {
-      background: white;
-      padding: 1rem;
-      flex: 1 1 48%;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      min-width: 300px;
-      box-sizing: border-box;
-      margin-bottom: 1rem;
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 1.3rem;
-      color: #007bff;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.2rem;
-      font-weight: bold;
-    }
-    input, textarea, button {
-      width: 100%;
-      margin-bottom: 0.6rem;
-      padding: 0.4rem;
-      font-size: 1rem;
-      border-radius: 4px;
-      border: 1px solid #bbb;
-      box-sizing: border-box;
-    }
-    input[type="date"], input[type="time"], input[type="number"] {
-      max-width: 180px;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .task-list {
-      margin-top: 1rem;
-    }
-    .task-card {
-      background: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      padding: 0.7rem;
-      margin-bottom: 0.7rem;
-    }
-    .task-title {
-      font-weight: bold;
-      margin-bottom: 0.2rem;
-    }
-    .task-meta {
-      font-size: 0.95em;
-      color: #444;
-      margin-bottom: 0.2rem;
-    }
-    .task-desc {
-      margin-bottom: 0.3rem;
-    }
-    .task-contact {
-      color: #006400;
-      font-size: 0.96em;
-    }
-    @media (max-width: 700px) {
-      main {
-        flex-direction: column;
-      }
-      section {
-        flex: 1 1 100%;
-        min-width: unset;
-      }
-    }
+    body { font-family: sans-serif; max-width: 500px; margin: 40px auto; }
+    input, button { font-size: 1em; padding: 5px; }
+    #tasks { margin-top: 20px; }
+    .task { border-bottom: 1px solid #eee; padding: 8px 0; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>FlexJob</h1>
-    <div class="description">
-      Работа на твоих условиях — быстро и удобно<br>
-      <br>
-      FlexJob — сервис для поиска временной работы и подработок. Работодатели размещают задания с датой, временем и оплатой, а работники выбирают и откликаются в пару кликов.
-    </div>
-  </header>
-  <main>
-    <!-- Работодатель -->
-    <section>
-      <h2>Добавить задание (Работодатель)</h2>
-      <form id="slotForm" autocomplete="off">
-        <label for="title">Название задания</label>
-        <input type="text" id="title" placeholder="Например, курьер на день" required autocomplete="off">
-        
-        <div style="display: flex; gap: 0.5rem;">
-          <div style="flex: 1;">
-            <label for="startDate">Дата начала</label>
-            <input type="date" id="startDate" required autocomplete="off">
-          </div>
-          <div style="flex: 1;">
-            <label for="startTime">Время начала</label>
-            <input type="time" id="startTime" required autocomplete="off">
-          </div>
-        </div>
-        <div style="display: flex; gap: 0.5rem;">
-          <div style="flex: 1;">
-            <label for="endDate">Дата окончания</label>
-            <input type="date" id="endDate" required autocomplete="off">
-          </div>
-          <div style="flex: 1;">
-            <label for="endTime">Время окончания</label>
-            <input type="time" id="endTime" required autocomplete="off">
-          </div>
-        </div>
-        <label for="rate">Оплата в час (₽)</label>
-        <input type="number" id="rate" min="0" step="1" placeholder="500" required autocomplete="off">
-        <label for="desc">Описание задания</label>
-        <textarea id="desc" rows="3" placeholder="Коротко опишите задачу" required></textarea>
-        <label for="contact">Контакты</label>
-        <input type="text" id="contact" placeholder="Телефон, Telegram, email" required autocomplete="off">
-        <button type="submit">Добавить</button>
-      </form>
-      <div id="addStatus" style="color: green; margin-top: 0.5rem;"></div>
-    </section>
-
-    <!-- Работник -->
-    <section>
-      <h2>Найти задание (Работник)</h2>
-      <form id="filterForm" autocomplete="off">
-        <label for="search">Поиск по названию/описанию</label>
-        <input type="text" id="search" placeholder="Ключевые слова">
-
-        <label for="minRate">Мин. ставка (₽)</label>
-        <input type="number" id="minRate" min="0" step="1" placeholder="0">
-
-        <label for="filterDate">Дата</label>
-        <input type="date" id="filterDate">
-
-        <button type="submit">Применить</button>
-        <button type="button" id="resetBtn" style="background:#aaa;margin-top:0.3rem;">Сбросить</button>
-      </form>
-      <div class="task-list" id="taskList">
-        <!-- Cards will appear here -->
-      </div>
-    </section>
-  </main>
+  <h1>FlexJob: Tasks (Firebase Demo)</h1>
+  <input type="text" id="taskInput" placeholder="Название задачи" />
+  <button onclick="addTask()">Добавить задачу</button>
+  <div id="tasks"></div>
   <script>
-    let slots = [];
+    // ТВОЙ КОНФИГ ОТСЮДА — НЕ ЗАБУДЬ storageBucket .appspot.com!
+    const firebaseConfig = {
+      apiKey: "AIzaSyDIY4EijEtCdwcXh_nx8dg5OrI6zKheS1g",
+      authDomain: "flexjob-b25a2.firebaseapp.com",
+      projectId: "flexjob-b25a2",
+      storageBucket: "flexjob-b25a2.appspot.com",
+      messagingSenderId: "1087733998205",
+      appId: "1:1087733998205:web:e95f38b61ff66c43050714",
+      measurementId: "G-D0YFEWXMRV"
+    };
+    // Инициализация Firebase и Firestore
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-    // Вспомогательная функция для проверки дат
-    function inDateRange(slot, filterDate) {
-      if (!filterDate) return true;
-      const fDate = new Date(filterDate);
-      const start = new Date(slot.startDate);
-      const end = new Date(slot.endDate);
-      return fDate >= start && fDate <= end;
+    // Добавление новой задачи
+    async function addTask() {
+      const input = document.getElementById('taskInput');
+      const title = input.value.trim();
+      if (!title) return alert("Введите название задачи!");
+      await db.collection("tasks").add({
+        title: title,
+        createdAt: new Date().toISOString()
+      });
+      input.value = "";
+      showTasks();
     }
 
-    function renderSlots(list = slots) {
-      const taskList = document.getElementById('taskList');
-      taskList.innerHTML = '';
-      if (list.length === 0) {
-        taskList.innerHTML = '<div style="color:#888;margin-top:0.7em">Заданий пока нет</div>';
+    // Показать все задачи
+    async function showTasks() {
+      const snap = await db.collection("tasks").orderBy("createdAt", "desc").get();
+      const div = document.getElementById('tasks');
+      if (snap.empty) {
+        div.innerHTML = "<i>Задач пока нет.</i>";
         return;
       }
-      list.forEach((slot, i) => {
-        // Экранирование пользовательских данных
-        function esc(str) {
-          return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-        }
-        const card = document.createElement('div');
-        card.className = 'task-card';
-        card.innerHTML = `
-          <div class="task-title">${esc(slot.title)}</div>
-          <div class="task-meta">
-            <b>С ${esc(slot.startDate)} ${esc(slot.startTime)}</b>
-            до <b>${esc(slot.endDate)} ${esc(slot.endTime)}</b>
-            | <b>${esc(slot.rate)}₽/ч</b>
-          </div>
-          <div class="task-desc">${esc(slot.desc)}</div>
-          <div class="task-contact">Контакты: ${esc(slot.contact)}</div>
-        `;
-        taskList.appendChild(card);
+      div.innerHTML = "";
+      snap.forEach(doc => {
+        const d = doc.data();
+        div.innerHTML += `<div class="task"><b>${d.title}</b> <span style="color:#888">(${d.createdAt})</span></div>`;
       });
     }
-
-    document.getElementById('slotForm').onsubmit = function(e) {
-      e.preventDefault();
-      const title = document.getElementById('title').value.trim();
-      const startDate = document.getElementById('startDate').value;
-      const startTime = document.getElementById('startTime').value;
-      const endDate = document.getElementById('endDate').value;
-      const endTime = document.getElementById('endTime').value;
-      const rate = document.getElementById('rate').value.trim();
-      const desc = document.getElementById('desc').value.trim();
-      const contact = document.getElementById('contact').value.trim();
-
-      if (!title || !startDate || !startTime || !endDate || !endTime || !rate || !desc || !contact) {
-        document.getElementById('addStatus').style.color = "red";
-        document.getElementById('addStatus').textContent = "Заполните все поля";
-        return;
-      }
-      if (+rate < 0) {
-        document.getElementById('addStatus').style.color = "red";
-        document.getElementById('addStatus').textContent = "Ставка не может быть отрицательной";
-        return;
-      }
-
-      slots.push({title, startDate, startTime, endDate, endTime, rate, desc, contact});
-      renderSlots();
-      document.getElementById('slotForm').reset();
-      document.getElementById('addStatus').style.color = "green";
-      document.getElementById('addStatus').textContent = "Задание добавлено!";
-      setTimeout(() => document.getElementById('addStatus').textContent = "", 2000);
-    };
-
-    document.getElementById('filterForm').onsubmit = function(e) {
-      e.preventDefault();
-      const search = document.getElementById('search').value.toLowerCase().trim();
-      const minRate = +document.getElementById('minRate').value;
-      const filterDate = document.getElementById('filterDate').value;
-
-      const filtered = slots.filter(slot => {
-        let ok = true;
-        if (search) {
-          const txt = (slot.title + " " + slot.desc).toLowerCase();
-          ok = ok && txt.includes(search);
-        }
-        if (!isNaN(minRate) && minRate > 0) {
-          ok = ok && (+slot.rate >= minRate);
-        }
-        if (filterDate) {
-          ok = ok && inDateRange(slot, filterDate);
-        }
-        return ok;
-      });
-      renderSlots(filtered);
-    };
-
-    document.getElementById('resetBtn').onclick = function() {
-      document.getElementById('filterForm').reset();
-      renderSlots();
-    };
-
-    // Первый рендер
-    renderSlots();
+    showTasks();
   </script>
 </body>
 </html>
