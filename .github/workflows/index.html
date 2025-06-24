@@ -1,401 +1,284 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>FlexJob — работа на твоих условиях</title>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Noto Sans', Arial, sans-serif;
-    background: #fff;
-    color: #222;
-    line-height: 1.4;
-  }
-  .container {
-    max-width: 1100px;
-    margin: 1.5rem auto 2rem;
-    padding: 0 1rem;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  header h1 {
-    font-weight: 700;
-    font-size: 2rem;
-    margin-bottom: 0.25rem;
-    color: #111;
-  }
-  header p {
-    font-weight: 400;
-    font-size: 1rem;
-    color: #555;
-    margin-top: 0;
-  }
-  .description {
-    background: #fafafa;
-    border-left: 4px solid #4a90e2;
-    padding: 0.8rem 1.2rem;
-    margin-bottom: 1.8rem;
-    font-size: 1rem;
-    color: #444;
-  }
-  main {
-    display: flex;
-    gap: 15px;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    width: 100%;
-
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  section {
-    flex: 0 0 48%;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 1px 5px rgb(0 0 0 / 0.06);
-    padding: 1rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    font-size: 0.9rem;
-  }
-  h2 {
-    margin-top: 0;
-    font-weight: 700;
-    color: #4a90e2;
-    border-bottom: 2px solid #4a90e2;
-    padding-bottom: 0.25rem;
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
-  }
-  label {
-    font-weight: 600;
-    color: #333;
-    margin-top: 0.8rem;
-  }
-  input[type=text],
-  input[type=number],
-  input[type=date],
-  select,
-  textarea {
-    width: 100%;
-    padding: 0.4rem 0.6rem;
-    margin-top: 0.25rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-  }
-  input[type=text]:focus,
-  input[type=number]:focus,
-  input[type=date]:focus,
-  select:focus,
-  textarea:focus {
-    outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 4px rgba(74,144,226,0.4);
-  }
-  textarea {
-    resize: vertical;
-    min-height: 70px;
-  }
-  button {
-    margin-top: 1.5rem;
-    padding: 0.5rem 1.2rem;
-    background: #4a90e2;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: flex-start;
-  }
-  button:hover {
-    background: #357abd;
-  }
-  #worker-section label,
-  #worker-section input {
-    margin-top: 0.6rem;
-  }
-  #filterBtn {
-    margin-top: 1rem;
-  }
-  #slots {
-    margin-top: 1rem;
-    overflow-y: auto;
-    flex-grow: 1;
-    font-size: 0.9rem;
-  }
-  .slot {
-    padding: 0.6rem 0;
-    border-bottom: 1px solid #eee;
-    position: relative;
-  }
-  .slot:last-child {
-    border-bottom: none;
-  }
-  .slot h3 {
-    margin: 0 0 0.25rem;
-    font-weight: 700;
-    color: #2c3e50;
-    font-size: 1.1rem;
-  }
-  .slot p {
-    margin: 0.15rem 0;
-    color: #555;
-  }
-  .btn-respond {
-    position: absolute;
-    right: 0;
-    top: 1rem;
-    background: #4a90e2;
-    border: none;
-    color: white;
-    padding: 0.25rem 0.6rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: background-color 0.3s ease;
-  }
-  .btn-respond:hover {
-    background: #357abd;
-  }
-  .flex-row {
-    display: flex;
-    gap: 0.8rem;
-    flex-wrap: wrap;
-    margin-top: 0.25rem;
-  }
-  .flex-col {
-    flex: 1;
-    min-width: 100px;
-    display: flex;
-    flex-direction: column;
-  }
-</style>
-</head>
-<body>
-<div class="container">
-  <header>
-    <h1>FlexJob</h1>
-    <p>Работа на твоих условиях — быстро и удобно</p>
-  </header>
-
-  <section class="description">
-    FlexJob — сервис для поиска временной работы и подработок. Работодатели размещают задания с датой, временем и оплатой, а работники выбирают и откликаются в пару кликов.
-  </section>
-
-  <main>
-    <section id="employer-section">
-      <h2>Добавить задание (Работодатель)</h2>
-      <label for="title">Название задания *</label>
-      <input type="text" id="title" placeholder="Например: Курьер в офис" required />
-
-      <div class="flex-row">
-        <div class="flex-col">
-          <label for="dateStart">Дата начала *</label>
-          <input type="date" id="dateStart" required />
-        </div>
-        <div class="flex-col">
-          <label for="timeStart">Время начала *</label>
-          <select id="timeStart" required></select>
-        </div>
-      </div>
-
-      <div class="flex-row">
-        <div class="flex-col">
-          <label for="dateEnd">Дата окончания *</label>
-          <input type="date" id="dateEnd" required />
-        </div>
-        <div class="flex-col">
-          <label for="timeEnd">Время окончания *</label>
-          <select id="timeEnd" required></select>
-        </div>
-      </div>
-
-      <label for="rate">Оплата в час (₽) *</label>
-      <input type="number" id="rate" min="0" placeholder="Например: 800" required />
-
-      <label for="desc">Описание задания</label>
-      <textarea id="desc" placeholder="Подробности задания (необязательно)"></textarea>
-
-      <label for="contact">Контакты для связи *</label>
-      <input type="text" id="contact" placeholder="Телефон, Telegram, WhatsApp" required />
-
-      <button id="addSlotBtn">Добавить задание</button>
-    </section>
-
-    <section id="worker-section">
-      <h2>Найти задание (Работник)</h2>
-      <label for="searchText">Поиск по названию и описанию:</label>
-      <input type="text" id="searchText" placeholder="Например: курьер, помощь, уборка" />
-
-      <label for="minRate">Минимальная ставка (₽/час):</label>
-      <input type="number" id="minRate" min="0" placeholder="Например: 500" />
-
-      <label for="dateFrom">Показывать задания с даты:</label>
-      <input type="date" id="dateFrom" />
-
-      <button id="filterBtn">Применить фильтр</button>
-
-      <div id="slots"></div>
-    </section>
-  </main>
-</div>
-
-<script>
-  function fillTimeSelect(id) {
-    const select = document.getElementById(id);
-    select.innerHTML = '';
-    for(let h=0; h<24; h++) {
-      for(let m=0; m<60; m+=30) {
-        const hh = h.toString().padStart(2, '0');
-        const mm = m.toString().padStart(2, '0');
-        const val = `${hh}:${mm}`;
-        const opt = document.createElement('option');
-        opt.value = val;
-        opt.textContent = val;
-        select.appendChild(opt);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlexJob</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 1rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .description {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #e0f0ff;
+      border-left: 5px solid #007bff;
+    }
+    main {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    section {
+      background: white;
+      padding: 1rem;
+      flex: 1 1 48%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      min-width: 300px;
+      box-sizing: border-box;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      color: #007bff;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.2rem;
+      font-weight: bold;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin-bottom: 0.6rem;
+      padding: 0.4rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      border: 1px solid #bbb;
+      box-sizing: border-box;
+    }
+    input[type="date"], input[type="time"], input[type="number"] {
+      max-width: 180px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .task-list {
+      margin-top: 1rem;
+    }
+    .task-card {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 0.7rem;
+      margin-bottom: 0.7rem;
+    }
+    .task-title {
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+    .task-meta {
+      font-size: 0.95em;
+      color: #444;
+      margin-bottom: 0.2rem;
+    }
+    .task-desc {
+      margin-bottom: 0.3rem;
+    }
+    .task-contact {
+      color: #006400;
+      font-size: 0.96em;
+    }
+    @media (max-width: 700px) {
+      main {
+        flex-direction: column;
+      }
+      section {
+        flex: 1 1 100%;
+        min-width: unset;
       }
     }
-  }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>FlexJob</h1>
+    <div class="description">
+      Работа на твоих условиях — быстро и удобно<br>
+      <br>
+      FlexJob — сервис для поиска временной работы и подработок. Работодатели размещают задания с датой, временем и оплатой, а работники выбирают и откликаются в пару кликов.
+    </div>
+  </header>
+  <main>
+    <!-- Работодатель -->
+    <section>
+      <h2>Добавить задание (Работодатель)</h2>
+      <form id="slotForm" autocomplete="off">
+        <label for="title">Название задания</label>
+        <input type="text" id="title" placeholder="Например, курьер на день" required autocomplete="off">
+        
+        <div style="display: flex; gap: 0.5rem;">
+          <div style="flex: 1;">
+            <label for="startDate">Дата начала</label>
+            <input type="date" id="startDate" required autocomplete="off">
+          </div>
+          <div style="flex: 1;">
+            <label for="startTime">Время начала</label>
+            <input type="time" id="startTime" required autocomplete="off">
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <div style="flex: 1;">
+            <label for="endDate">Дата окончания</label>
+            <input type="date" id="endDate" required autocomplete="off">
+          </div>
+          <div style="flex: 1;">
+            <label for="endTime">Время окончания</label>
+            <input type="time" id="endTime" required autocomplete="off">
+          </div>
+        </div>
+        <label for="rate">Оплата в час (₽)</label>
+        <input type="number" id="rate" min="0" step="1" placeholder="500" required autocomplete="off">
+        <label for="desc">Описание задания</label>
+        <textarea id="desc" rows="3" placeholder="Коротко опишите задачу" required></textarea>
+        <label for="contact">Контакты</label>
+        <input type="text" id="contact" placeholder="Телефон, Telegram, email" required autocomplete="off">
+        <button type="submit">Добавить</button>
+      </form>
+      <div id="addStatus" style="color: green; margin-top: 0.5rem;"></div>
+    </section>
 
-  fillTimeSelect('timeStart');
-  fillTimeSelect('timeEnd');
+    <!-- Работник -->
+    <section>
+      <h2>Найти задание (Работник)</h2>
+      <form id="filterForm" autocomplete="off">
+        <label for="search">Поиск по названию/описанию</label>
+        <input type="text" id="search" placeholder="Ключевые слова">
 
-  let slots = [];
+        <label for="minRate">Мин. ставка (₽)</label>
+        <input type="number" id="minRate" min="0" step="1" placeholder="0">
 
-  function loadSlots() {
-    const raw = localStorage.getItem('slots');
-    if(raw) {
-      slots = JSON.parse(raw);
-    }
-  }
+        <label for="filterDate">Дата</label>
+        <input type="date" id="filterDate">
 
-  function saveSlots() {
-    localStorage.setItem('slots', JSON.stringify(slots));
-  }
+        <button type="submit">Применить</button>
+        <button type="button" id="resetBtn" style="background:#aaa;margin-top:0.3rem;">Сбросить</button>
+      </form>
+      <div class="task-list" id="taskList">
+        <!-- Cards will appear here -->
+      </div>
+    </section>
+  </main>
+  <script>
+    let slots = [];
 
-  function renderSlots() {
-    const container = document.getElementById('slots');
-    container.innerHTML = '';
-
-    const searchText = document.getElementById('searchText').value.trim().toLowerCase();
-    const minRate = parseInt(document.getElementById('minRate').value) || 0;
-    const dateFromVal = document.getElementById('dateFrom').value;
-    const dateFrom = dateFromVal ? new Date(dateFromVal) : null;
-    const now = new Date();
-
-    const filtered = slots
-      .filter(s => new Date(s.end) > now)
-      .filter(s =>
-        s.title.toLowerCase().includes(searchText) ||
-        s.desc.toLowerCase().includes(searchText)
-      )
-      .filter(s => Number(s.rate) >= minRate)
-      .filter(s => !dateFrom || new Date(s.start) >= dateFrom)
-      .sort((a,b) => new Date(a.start) - new Date(b.start));
-
-    if(filtered.length === 0) {
-      container.innerHTML = '<p>😕 По вашему запросу заданий не найдено.</p>';
-      return;
-    }
-
-    filtered.forEach((slot, i) => {
-      const start = new Date(slot.start).toLocaleString();
-      const end = new Date(slot.end).toLocaleString();
-      const slotDiv = document.createElement('div');
-      slotDiv.className = 'slot';
-
-      slotDiv.innerHTML = `
-        <h3>${slot.title}</h3>
-        <p><strong>Время:</strong> ${start} – ${end}</p>
-        <p><strong>Ставка:</strong> ${slot.rate} ₽/час</p>
-        <p>${slot.desc ? slot.desc : '<i>Описание отсутствует</i>'}</p>
-        <p><strong>Контакты:</strong> <span id="contact${i}">${slot.contact}</span></p>
-        <button class="btn-respond" onclick="copyContact(${i})">📩 Откликнуться</button>
-      `;
-
-      container.appendChild(slotDiv);
-    });
-  }
-
-  function copyContact(index) {
-    const contactText = document.getElementById(`contact${index}`).innerText;
-    navigator.clipboard.writeText(contactText)
-      .then(() => alert(`Контакт скопирован:\n${contactText}`))
-      .catch(() => alert('Не удалось скопировать контакт'));
-  }
-
-  function addSlot() {
-    const title = document.getElementById('title').value.trim();
-    const dateStart = document.getElementById('dateStart').value;
-    const timeStart = document.getElementById('timeStart').value;
-    const dateEnd = document.getElementById('dateEnd').value;
-    const timeEnd = document.getElementById('timeEnd').value;
-    const rate = document.getElementById('rate').value;
-    const desc = document.getElementById('desc').value.trim();
-    const contact = document.getElementById('contact').value.trim();
-
-    if (!title || !dateStart || !timeStart || !dateEnd || !timeEnd || !rate || !contact) {
-      alert('Заполните все обязательные поля!');
-      return;
-    }
-
-    const startDateTime = new Date(`${dateStart}T${timeStart}:00`);
-    const endDateTime = new Date(`${dateEnd}T${timeEnd}:00`);
-
-    if (startDateTime >= endDateTime) {
-      alert('Дата и время начала должны быть раньше даты и времени окончания!');
-      return;
+    // Вспомогательная функция для проверки дат
+    function inDateRange(slot, filterDate) {
+      if (!filterDate) return true;
+      const fDate = new Date(filterDate);
+      const start = new Date(slot.startDate);
+      const end = new Date(slot.endDate);
+      return fDate >= start && fDate <= end;
     }
 
-    slots.push({
-      title,
-      start: startDateTime.toISOString(),
-      end: endDateTime.toISOString(),
-      rate,
-      desc,
-      contact
-    });
+    function renderSlots(list = slots) {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+      if (list.length === 0) {
+        taskList.innerHTML = '<div style="color:#888;margin-top:0.7em">Заданий пока нет</div>';
+        return;
+      }
+      list.forEach((slot, i) => {
+        // Экранирование пользовательских данных
+        function esc(str) {
+          return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        }
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        card.innerHTML = `
+          <div class="task-title">${esc(slot.title)}</div>
+          <div class="task-meta">
+            <b>С ${esc(slot.startDate)} ${esc(slot.startTime)}</b>
+            до <b>${esc(slot.endDate)} ${esc(slot.endTime)}</b>
+            | <b>${esc(slot.rate)}₽/ч</b>
+          </div>
+          <div class="task-desc">${esc(slot.desc)}</div>
+          <div class="task-contact">Контакты: ${esc(slot.contact)}</div>
+        `;
+        taskList.appendChild(card);
+      });
+    }
 
-    saveSlots();
+    document.getElementById('slotForm').onsubmit = function(e) {
+      e.preventDefault();
+      const title = document.getElementById('title').value.trim();
+      const startDate = document.getElementById('startDate').value;
+      const startTime = document.getElementById('startTime').value;
+      const endDate = document.getElementById('endDate').value;
+      const endTime = document.getElementById('endTime').value;
+      const rate = document.getElementById('rate').value.trim();
+      const desc = document.getElementById('desc').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+
+      if (!title || !startDate || !startTime || !endDate || !endTime || !rate || !desc || !contact) {
+        document.getElementById('addStatus').style.color = "red";
+        document.getElementById('addStatus').textContent = "Заполните все поля";
+        return;
+      }
+      if (+rate < 0) {
+        document.getElementById('addStatus').style.color = "red";
+        document.getElementById('addStatus').textContent = "Ставка не может быть отрицательной";
+        return;
+      }
+
+      slots.push({title, startDate, startTime, endDate, endTime, rate, desc, contact});
+      renderSlots();
+      document.getElementById('slotForm').reset();
+      document.getElementById('addStatus').style.color = "green";
+      document.getElementById('addStatus').textContent = "Задание добавлено!";
+      setTimeout(() => document.getElementById('addStatus').textContent = "", 2000);
+    };
+
+    document.getElementById('filterForm').onsubmit = function(e) {
+      e.preventDefault();
+      const search = document.getElementById('search').value.toLowerCase().trim();
+      const minRate = +document.getElementById('minRate').value;
+      const filterDate = document.getElementById('filterDate').value;
+
+      const filtered = slots.filter(slot => {
+        let ok = true;
+        if (search) {
+          const txt = (slot.title + " " + slot.desc).toLowerCase();
+          ok = ok && txt.includes(search);
+        }
+        if (!isNaN(minRate) && minRate > 0) {
+          ok = ok && (+slot.rate >= minRate);
+        }
+        if (filterDate) {
+          ok = ok && inDateRange(slot, filterDate);
+        }
+        return ok;
+      });
+      renderSlots(filtered);
+    };
+
+    document.getElementById('resetBtn').onclick = function() {
+      document.getElementById('filterForm').reset();
+      renderSlots();
+    };
+
+    // Первый рендер
     renderSlots();
-    clearForm();
-    alert('Задание успешно добавлено!');
-  }
-
-  function clearForm() {
-    document.getElementById('title').value = '';
-    document.getElementById('dateStart').value = '';
-    document.getElementById('timeStart').value = '09:00';
-    document.getElementById('dateEnd').value = '';
-    document.getElementById('timeEnd').value = '18:00';
-    document.getElementById('rate').value = '';
-    document.getElementById('desc').value = '';
-    document.getElementById('contact').value = '';
-  }
-
-  document.getElementById('addSlotBtn').addEventListener('click', addSlot);
-  document.getElementById('filterBtn').addEventListener('click', renderSlots);
-
-  window.onload = () => {
-    fillTimeSelect('timeStart');
-    fillTimeSelect('timeEnd');
-    loadSlots();
-    renderSlots();
-    document.getElementById('timeStart').value = '09:00';
-    document.getElementById('timeEnd').value = '18:00';
-  };
-</script>
+  </script>
 </body>
 </html>
